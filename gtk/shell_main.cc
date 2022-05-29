@@ -196,165 +196,219 @@ static void gif_writer(const char *text, int length);
 #endif
 
 static const char *mainWindowXml =
-"<?xml version='1.0' encoding='UTF-8'?>"
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
 "<interface>"
-  "<!-- interface-requires gtk+ 3.0 -->"
-  "<object class='GtkApplicationWindow' id='window'>"
+  "<requires lib=\"gtk+\" version=\"3.24\"/>"
+  "<object class=\"GtkMenu\" id=\"top_menu\">"
+    "<property name=\"visible\">True</property>"
+    "<property name=\"can-focus\">False</property>"
     "<child>"
-      "<object class='GtkVBox' id='box'>"
-        "<child>"
-          "<object class='GtkMenuBar' id='menubar'>"
+      "<object class=\"GtkMenuItem\" id=\"file_item\">"
+        "<property name=\"visible\">True</property>"
+        "<property name=\"can-focus\">False</property>"
+        "<property name=\"label\" translatable=\"yes\">File</property>"
+        "<property name=\"use-underline\">True</property>"
+        "<child type=\"submenu\">"
+          "<object class=\"GtkMenu\" id=\"file_menu\">"
+            "<property name=\"visible\">True</property>"
+            "<property name=\"can-focus\">False</property>"
             "<child>"
-              "%s" // Additional menu level goes here when using -compactmenu
-              "<object class='GtkMenuItem' id='file_item'>"
-                "<property name='label'>File</property>"
-                "<child type='submenu'>"
-                  "<object class='GtkMenu' id='file_menu'>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='states_item'>"
-                        "<property name='label'>States...</property>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkSeparatorMenuItem' id='sep_1'>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='show_printout_item'>"
-                        "<property name='label'>Show Print-Out</property>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='paper_advance_item'>"
-                        "<property name='label'>Paper Advance</property>"
-                        "<accelerator key='A' signal='activate' modifiers='GDK_CONTROL_MASK'/>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkSeparatorMenuItem' id='sep_2'>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='import_programs_item'>"
-                        "<property name='label'>Import Programs...</property>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='export_programs_item'>"
-                        "<property name='label'>Export Programs...</property>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkSeparatorMenuItem' id='sep_3'>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='preferences_item'>"
-                        "<property name='label'>Preferences...</property>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkSeparatorMenuItem' id='sep_4'>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='quit_item'>"
-                        "<property name='label'>Quit</property>"
-                        "<accelerator key='Q' signal='activate' modifiers='GDK_CONTROL_MASK'/>"
-                      "</object>"
-                    "</child>"
-                  "</object>"
-                "</child>"
+              "<object class=\"GtkMenuItem\" id=\"states_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">States...</property>"
+                "<property name=\"use-underline\">True</property>"
               "</object>"
             "</child>"
             "<child>"
-              "<object class='GtkMenuItem' id='edit_item'>"
-                "<property name='label'>Edit</property>"
-                "<child type='submenu'>"
-                  "<object class='GtkMenu' id='edit_menu'>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='copy_item'>"
-                        "<property name='label'>Copy</property>"
-                        "<accelerator key='C' signal='activate' modifiers='GDK_CONTROL_MASK'/>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='paste_item'>"
-                        "<property name='label'>Paste</property>"
-                        "<accelerator key='V' signal='activate' modifiers='GDK_CONTROL_MASK'/>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkSeparatorMenuItem' id='sep_5'>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='copy_printout_as_text_item'>"
-                        "<property name='label'>Copy Print-Out as Text</property>"
-                        "<accelerator key='T' signal='activate' modifiers='GDK_CONTROL_MASK'/>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='copy_printout_as_image_item'>"
-                        "<property name='label'>Copy Print-Out as Image</property>"
-                        "<accelerator key='I' signal='activate' modifiers='GDK_CONTROL_MASK'/>"
-                      "</object>"
-                    "</child>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='clear_printout_item'>"
-                        "<property name='label'>Clear Print-Out</property>"
-                      "</object>"
-                    "</child>"
-                  "</object>"
-                "</child>"
+              "<object class=\"GtkSeparatorMenuItem\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
               "</object>"
             "</child>"
             "<child>"
-              "<object class='GtkMenuItem' id='skin_item'>"
-                "<property name='label'>Skin</property>"
-                "<child type='submenu'>"
-                  "<object class='GtkMenu' id='skin_menu'>"
-                    "<!-- Skin items inserted programmatically here -->"
-                  "</object>"
-                "</child>"
+              "<object class=\"GtkMenuItem\" id=\"show_printout_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">Show Print-Out</property>"
+                "<property name=\"use-underline\">True</property>"
               "</object>"
             "</child>"
             "<child>"
-              "<object class='GtkMenuItem' id='help_item'>"
-                "<property name='label'>Help</property>"
-                "<child type='submenu'>"
-                  "<object class='GtkMenu' id='help_menu'>"
-                    "<child>"
-                      "<object class='GtkMenuItem' id='about_item'>"
-                        "<property name='label'>About Plus42...</property>"
-                      "</object>"
-                    "</child>"
-                  "</object>"
-                "</child>"
+              "<object class=\"GtkMenuItem\" id=\"paper_advance_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">Paper Advance</property>"
+                "<property name=\"use-underline\">True</property>"
+                "<accelerator key=\"a\" signal=\"activate\" modifiers=\"GDK_CONTROL_MASK\"/>"
               "</object>"
-              "%s"
+            "</child>"
+            "<child>"
+              "<object class=\"GtkSeparatorMenuItem\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+              "</object>"
+            "</child>"
+            "<child>"
+              "<object class=\"GtkMenuItem\" id=\"import_programs_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">Import Programs...</property>"
+                "<property name=\"use-underline\">True</property>"
+              "</object>"
+            "</child>"
+            "<child>"
+              "<object class=\"GtkMenuItem\" id=\"export_programs_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">Export Programs...</property>"
+                "<property name=\"use-underline\">True</property>"
+              "</object>"
+            "</child>"
+            "<child>"
+              "<object class=\"GtkSeparatorMenuItem\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+              "</object>"
+            "</child>"
+            "<child>"
+              "<object class=\"GtkMenuItem\" id=\"preferences_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">Preferences...</property>"
+                "<property name=\"use-underline\">True</property>"
+              "</object>"
+            "</child>"
+            "<child>"
+              "<object class=\"GtkSeparatorMenuItem\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+              "</object>"
+            "</child>"
+            "<child>"
+              "<object class=\"GtkMenuItem\" id=\"quit_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">Quit</property>"
+                "<property name=\"use-underline\">True</property>"
+                "<accelerator key=\"q\" signal=\"activate\" modifiers=\"GDK_CONTROL_MASK\"/>"
+              "</object>"
+            "</child>"
+          "</object>"
+        "</child>"
+      "</object>"
+    "</child>"
+    "<child>"
+      "<object class=\"GtkMenuItem\" id=\"edit_item\">"
+        "<property name=\"visible\">True</property>"
+        "<property name=\"can-focus\">False</property>"
+        "<property name=\"label\" translatable=\"yes\">Edit</property>"
+        "<property name=\"use-underline\">True</property>"
+        "<child type=\"submenu\">"
+          "<object class=\"GtkMenu\">"
+            "<property name=\"visible\">True</property>"
+            "<property name=\"can-focus\">False</property>"
+            "<child>"
+              "<object class=\"GtkMenuItem\" id=\"copy_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">Copy</property>"
+                "<property name=\"use-underline\">True</property>"
+                "<accelerator key=\"c\" signal=\"activate\" modifiers=\"GDK_CONTROL_MASK\"/>"
+              "</object>"
+            "</child>"
+            "<child>"
+              "<object class=\"GtkMenuItem\" id=\"paste_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">Paste</property>"
+                "<property name=\"use-underline\">True</property>"
+                "<accelerator key=\"v\" signal=\"activate\" modifiers=\"GDK_CONTROL_MASK\"/>"
+              "</object>"
+            "</child>"
+            "<child>"
+              "<object class=\"GtkSeparatorMenuItem\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+              "</object>"
+            "</child>"
+            "<child>"
+              "<object class=\"GtkMenuItem\" id=\"copy_printout_as_text_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">Copy Print-Out as Text</property>"
+                "<property name=\"use-underline\">True</property>"
+                "<accelerator key=\"t\" signal=\"activate\" modifiers=\"GDK_CONTROL_MASK\"/>"
+              "</object>"
+            "</child>"
+            "<child>"
+              "<object class=\"GtkMenuItem\" id=\"copy_printout_as_image_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">Copy Print-Out as Image</property>"
+                "<property name=\"use-underline\">True</property>"
+                "<accelerator key=\"i\" signal=\"activate\" modifiers=\"GDK_CONTROL_MASK\"/>"
+              "</object>"
+            "</child>"
+            "<child>"
+              "<object class=\"GtkMenuItem\" id=\"clear_printout_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">Clear Print-Out</property>"
+                "<property name=\"use-underline\">True</property>"
+              "</object>"
+            "</child>"
+          "</object>"
+        "</child>"
+      "</object>"
+    "</child>"
+    "<child>"
+      "<object class=\"GtkMenuItem\" id=\"skin_item\">"
+        "<property name=\"visible\">True</property>"
+        "<property name=\"can-focus\">False</property>"
+        "<property name=\"label\" translatable=\"yes\">Skin</property>"
+        "<property name=\"use-underline\">True</property>"
+        "<child type='submenu'>"
+          "<object class='GtkMenu' id='skin_menu'><!-- Skin items inserted programmatically here --></object>"
+        "</child>"
+      "</object>"
+    "</child>"
+    "<child>"
+      "<object class=\"GtkMenuItem\" id=\"Help\">"
+        "<property name=\"visible\">True</property>"
+        "<property name=\"can-focus\">False</property>"
+        "<property name=\"label\" translatable=\"yes\">Help</property>"
+        "<property name=\"use-underline\">True</property>"
+        "<child type=\"submenu\">"
+          "<object class=\"GtkMenu\">"
+            "<property name=\"visible\">True</property>"
+            "<property name=\"can-focus\">False</property>"
+            "<child>"
+              "<object class=\"GtkMenuItem\" id=\"about_item\">"
+                "<property name=\"visible\">True</property>"
+                "<property name=\"can-focus\">False</property>"
+                "<property name=\"label\" translatable=\"yes\">About Plus42...</property>"
+                "<property name=\"use-underline\">True</property>"
+              "</object>"
             "</child>"
           "</object>"
         "</child>"
       "</object>"
     "</child>"
   "</object>"
+  "<object class=\"GtkApplicationWindow\" id=\"window\">"
+    "<property name=\"can-focus\">False</property>"
+    "<property name=\"show-menubar\">False</property>"
+    "<child>"
+      "<object class=\"GtkBox\" id=\"box\">"
+        "<property name=\"visible\">True</property>"
+        "<property name=\"can-focus\">False</property>"
+        "<property name=\"orientation\">horizontal</property>"
+      "</object>"
+    "</child>"
+  "</object>"
 "</interface>";
 
-static const char *compactMenuIntroXml =
-"<object class='GtkMenuItem' id='top_item'>"
-  "<property name='label'>Menu</property>"
-  "<child type='submenu'>"
-    "<object class='GtkMenu' id='top_menu'>"
-      "<child>";
-
-static const char *compactMenuOutroXml =
-      "</child>"
-    "</object>"
-  "</child>"
-"</object>";
-
-static int use_compactmenu = 0;
 static char *skin_arg = NULL;
 
 static char cached_number_format[9];
@@ -365,8 +419,6 @@ int main(int argc, char *argv[]) {
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-skin") == 0)
             skin_arg = ++i < argc ? argv[i] : NULL;
-        else if (strcmp(argv[i], "-compactmenu") == 0)
-            use_compactmenu = 1;
         else {
             fprintf(stderr, "Unrecognized option: %s\n", argv[i]);
             exit(1);
@@ -521,20 +573,22 @@ static void activate(GtkApplication *theApp, gpointer userData) {
     /***** Build the main window *****/
     /*********************************/
 
-    char *xml = (char *) malloc(10240);
-    if (use_compactmenu)
-        sprintf(xml, mainWindowXml, compactMenuIntroXml, compactMenuOutroXml);
-    else
-        sprintf(xml, mainWindowXml, "", "");
     GtkBuilder *builder = gtk_builder_new();
-    gtk_builder_add_from_string(builder, xml, -1, NULL);
-    free(xml);
+    gtk_builder_add_from_string(builder, mainWindowXml, -1, NULL);
     GObject *obj = gtk_builder_get_object(builder, "window");
     mainwindow = GTK_WIDGET(obj);
     gtk_window_set_application(GTK_WINDOW(mainwindow), app);
 
     icon_128 = gdk_pixbuf_new_from_xpm_data((const char **) icon_128_xpm);
     icon_48 = gdk_pixbuf_new_from_xpm_data((const char **) icon_48_xpm);
+
+    GtkWidget *header = gtk_header_bar_new();
+    gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(header), TRUE);
+    GtkWidget *menu_btn = gtk_menu_button_new();
+    GtkWidget *top_menu = GTK_WIDGET(gtk_builder_get_object(builder, "top_menu"));
+    gtk_menu_button_set_popup(GTK_MENU_BUTTON(menu_btn), top_menu);
+    gtk_header_bar_pack_end(GTK_HEADER_BAR(header), menu_btn);
+    gtk_window_set_titlebar(GTK_WINDOW(mainwindow), GTK_WIDGET(header));
 
     gtk_window_set_icon(GTK_WINDOW(mainwindow), icon_128);
     gtk_window_set_title(GTK_WINDOW(mainwindow), TITLE);
@@ -590,6 +644,24 @@ static void activate(GtkApplication *theApp, gpointer userData) {
     item = GTK_MENU_ITEM(gtk_builder_get_object(builder, "about_item"));
     g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(aboutCB), NULL);
 
+    GtkAccelGroup *accels = gtk_accel_group_new();
+    gtk_window_add_accel_group(GTK_WINDOW(mainwindow), accels);
+    gtk_accel_group_connect(accels, GDK_KEY_s, GDK_CONTROL_MASK, (GtkAccelFlags)0,
+        g_cclosure_new(G_CALLBACK(statesCB), NULL, NULL));
+    gtk_accel_group_connect(accels, GDK_KEY_p, GDK_CONTROL_MASK, (GtkAccelFlags)0,
+        g_cclosure_new(G_CALLBACK(showPrintOutCB), NULL, NULL));
+    gtk_accel_group_connect(accels, GDK_KEY_a, GDK_CONTROL_MASK, (GtkAccelFlags)0,
+        g_cclosure_new(G_CALLBACK(paperAdvanceCB), NULL, NULL));
+    gtk_accel_group_connect(accels, GDK_KEY_q, GDK_CONTROL_MASK, (GtkAccelFlags)0,
+        g_cclosure_new(G_CALLBACK(quitCB), NULL, NULL));
+    gtk_accel_group_connect(accels, GDK_KEY_c, GDK_CONTROL_MASK, (GtkAccelFlags)0,
+        g_cclosure_new(G_CALLBACK(copyCB), NULL, NULL));
+    gtk_accel_group_connect(accels, GDK_KEY_v, GDK_CONTROL_MASK, (GtkAccelFlags)0,
+        g_cclosure_new(G_CALLBACK(pasteCB), NULL, NULL));
+    gtk_accel_group_connect(accels, GDK_KEY_t, GDK_CONTROL_MASK, (GtkAccelFlags)0,
+        g_cclosure_new(G_CALLBACK(copyPrintAsTextCB), NULL, NULL));
+    gtk_accel_group_connect(accels, GDK_KEY_i, GDK_CONTROL_MASK, (GtkAccelFlags)0,
+        g_cclosure_new(G_CALLBACK(copyPrintAsImageCB), NULL, NULL));
 
     /****************************************/
     /* Drawing area for the calculator skin */
@@ -1140,6 +1212,9 @@ static void show_message(const char *title, const char *message, GtkWidget *pare
     gtk_widget_destroy(msg);
 }
 
+#define MWM_WINDOW_MANAGER 0
+
+#if MWM_WINDOW_MANAGER
 static void no_mwm_resize_helper(GtkWidget *w, gpointer cd) {
     GdkWindow *win = gtk_widget_get_window(w);
     gdk_window_set_decorations(win, GdkWMDecoration(GDK_DECOR_ALL
@@ -1147,6 +1222,7 @@ static void no_mwm_resize_helper(GtkWidget *w, gpointer cd) {
     gdk_window_set_functions(win, GdkWMFunction(GDK_FUNC_ALL
                                     | GDK_FUNC_RESIZE | GDK_FUNC_MAXIMIZE));
 }
+#endif
 
 static void no_mwm_resize_borders(GtkWidget *window) {
     // gtk_window_set_resizable(w, FALSE) only sets the WM size hints, so that
@@ -1157,8 +1233,10 @@ static void no_mwm_resize_borders(GtkWidget *window) {
     // have a window with resize borders and a maximize button, none of which
     // actually let you resize the window.
     // So, we use an additional GDK call to set the appropriate mwm properties.
+#if MWM_WINDOW_MANAGER
     g_signal_connect(G_OBJECT(window), "realize",
                      G_CALLBACK(no_mwm_resize_helper), NULL);
+#endif
 }
 
 static void scroll_printout_to_bottom() {
