@@ -27,7 +27,6 @@
 #include <set>
 
 #include <string>
-#include <vector>
 #include <set>
 
 #include "shell_skin.h"
@@ -36,7 +35,6 @@
 #include "core_main.h"
 
 using std::string;
-using std::vector;
 using std::set;
 
 
@@ -144,60 +142,23 @@ extern const unsigned char * const skin_bitmap_data[];
 /* Local functions */
 /*******************/
 
-static void addMenuItem(GtkMenu *menu, const char *name, bool enabled);
-static void selectSkinCB(GtkWidget *w, gpointer cd);
+static void addMenuItem(GMenu *menu, const char *name, bool enabled);
 static bool skin_open(const char *name, bool open_layout, bool force_builtin);
 static int skin_gets(char *buf, int buflen);
 static void skin_close();
 
 
-static void addMenuItem(GtkMenu *menu, const char *name, bool enabled) {
-    bool checked = false;
-    if (enabled) {
-        if (state.skinName[0] == 0) {
-            strcpy(state.skinName, name);
-            checked = true;
-        } else if (strcmp(state.skinName, name) == 0)
-            checked = true;
-    }
+static void addMenuItem(GMenu *section, const char *name, bool enabled) {
+    if (enabled && state.skinName[0] == 0) 
+        strcpy(state.skinName, name);
 
-    GtkWidget *w = gtk_check_menu_item_new_with_label(name);
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), checked);
-    gtk_widget_set_sensitive(w, enabled);
-
-    g_signal_connect(G_OBJECT(w), "activate",
-                     G_CALLBACK(selectSkinCB), NULL);
-
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), w);
-    gtk_widget_show(w);
-}
-
-static void selectSkinCB(GtkWidget *w, gpointer cd) {
-    /* The gtk_check_menu_item_set_active() call causes this callback
-     * to be re-entered; this bit of logic is to prevent getting stuck
-     * in infinite recursion.
-     */
-    static bool busy = false;
-    if (busy)
-        return;
-    busy = true;
-
-    GtkWidget *skin_menu = gtk_widget_get_parent(w);
-    GList *children = gtk_container_get_children(GTK_CONTAINER(skin_menu));
-    GList *item = children;
-    while (item != NULL) {
-        GtkWidget *mi = GTK_WIDGET(item->data);
-        if (GTK_IS_CHECK_MENU_ITEM(mi))
-            gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mi), mi == w);
-        item = item->next;
-    }
-    g_list_free(children);
-
-    busy = false;
-
-    const char *label = gtk_menu_item_get_label(GTK_MENU_ITEM(w));
-    strcpy(state.skinName, label);
-    update_skin(-1, -1);
+    // the enabled parameter is used to show but disable skins overriden by global
+    // or private skins. With GMenu, the most practical solution to do this is to
+    // use an unmapped action.
+    GMenuItem *item = g_menu_item_new(name, enabled?"app.select_skin":"unmapped.select_skin");
+    g_menu_item_set_attribute(item, "target", "s", name);
+    g_menu_append_item(section, item);
+    g_object_unref(item);
 }
 
 void update_skin(int rows, int cols) {
@@ -339,15 +300,11 @@ static void scan_skin_dir(const char *dirname, set<string> &names) {
     closedir(dir);
 }
 
-void skin_menu_update(GtkWidget *w) {
-    GtkMenu *skin_menu = (GtkMenu *) gtk_menu_item_get_submenu(GTK_MENU_ITEM(w));
-    GList *children = gtk_container_get_children(GTK_CONTAINER(skin_menu));
-    GList *item = children;
-    while (item != NULL) {
-        gtk_widget_destroy(GTK_WIDGET(item->data));
-        item = item->next;
-    }
-    g_list_free(children);
+void skin_menu_update() {
+    GApplication *app = g_application_get_default();
+    GMenu *skin_menu = G_MENU(g_object_get_data (G_OBJECT(app), "skin_submenu"));
+
+    g_menu_remove_all(skin_menu);
 
     set<string> shared_skins;
     const char *xdg_data_dirs = getenv("XDG_DATA_DIRS");
@@ -375,25 +332,27 @@ void skin_menu_update(GtkWidget *w) {
     }
 
     if (!shared_skins.empty()) {
-        GtkWidget *w = gtk_separator_menu_item_new();
-        gtk_menu_shell_append(GTK_MENU_SHELL(skin_menu), w);
-        gtk_widget_show(w);
-
+        GMenu *section = g_menu_new();
         for (set<string>::const_iterator i = shared_skins.begin(); i != shared_skins.end(); i++) {
             const char *name = i->c_str();
             bool enabled = private_skins.find(name) == private_skins.end();
-            addMenuItem(skin_menu, name, enabled);
+            addMenuItem(section, name, enabled);
         }
+        g_menu_append_section(skin_menu, NULL, G_MENU_MODEL(section));
+        g_object_unref(section);
     }
 
     if (!private_skins.empty()) {
-        GtkWidget *w = gtk_separator_menu_item_new();
-        gtk_menu_shell_append(GTK_MENU_SHELL(skin_menu), w);
-        gtk_widget_show(w);
-
-        for (set<string>::const_iterator i = private_skins.begin(); i != private_skins.end(); i++)
-            addMenuItem(skin_menu, i->c_str(), true);
+        GMenu *section = g_menu_new();
+        for (set<string>::const_iterator i = private_skins.begin(); i != private_skins.end(); i++) {
+            addMenuItem(section, i->c_str(), true);
+        }
+        g_menu_append_section(skin_menu, NULL, G_MENU_MODEL(section));
+        g_object_unref(section);
     }
+
+    g_simple_action_set_state(G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(app), "select_skin")),
+                              g_variant_new_string(state.skinName));
 }
 
 void skin_load(int *width, int *height, int *rows, int *cols, int *flags) {

@@ -86,6 +86,7 @@
 /gtk/raw2txt.cc
 /gtk/txt2raw
 /gtk/txt2raw.cc
+/gtk/shell_resources.c
 
 # /mac/
 /mac/build
