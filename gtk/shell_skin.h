@@ -20,7 +20,7 @@
 
 #include <gtk/gtk.h>
 
-void skin_menu_update(GtkWidget *w);
+void skin_menu_update();
 void skin_load(int *width, int *height, int *rows, int *cols, int *flags);
 void update_skin(int rows, int cols);
 

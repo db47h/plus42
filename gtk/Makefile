@@ -17,6 +17,7 @@
 
 PKG_CONFIG ?= pkg-config
 CXX_FOR_BUILD ?= $(CXX)
+GLIB_COMPILE_RESOURCES = $(shell $(PKG_CONFIG) --variable=glib_compile_resources gio-2.0)
 
 CFLAGS += -MMD \
 	 -Wall \
@@ -61,6 +62,7 @@ endif
 
 SRCS = shell_main.cc shell_skin.cc skins.cc keymap.cc shell_loadimage.cc \
 	shell_spool.cc core_main.cc core_commands1.cc core_commands2.cc \
+	shell_resources.c \
 	core_commands3.cc core_commands4.cc core_commands5.cc \
 	core_commands6.cc core_commands7.cc core_commands8.cc \
 	core_commands9.cc core_commandsa.cc core_display.cc \
@@ -76,7 +78,7 @@ CORE_OBJS = shell_spool.o core_main.o core_commands1.o core_commands2.o \
 	core_linalg1.o core_linalg2.o core_math1.o core_math2.o \
 	core_parser.o core_phloat.o core_sto_rcl.o core_tables.o \
 	core_variables.o
-OBJS = shell_main.o shell_skin.o skins.o keymap.o shell_loadimage.o \
+OBJS = shell_resources.o shell_main.o shell_skin.o skins.o keymap.o shell_loadimage.o \
 	$(CORE_OBJS)
 
 ifdef BCD_MATH
@@ -132,6 +134,12 @@ keymap2cc: keymap2cc.cc
 keymap.cc: keymap2cc keymap.txt
 	./keymap2cc
 
+shell_resources.c: shell.gresource.xml shell.ui
+	$(GLIB_COMPILE_RESOURCES) shell.gresource.xml --target=$@ --sourcedir=. --generate-source
+
+shell_resources.o: shell_resources.c
+	$(CC) -c -o $@ $(CFLAGS) $<
+
 gcc111libbid.a:
 	sh ./build-intel-lib.sh
 	ln -s IntelRDFPMathLib20U1/TESTS/readtest.c
@@ -145,6 +153,7 @@ clean: FORCE
 		skin2cc skin2cc.exe skins.cc \
 		keymap2cc keymap2cc.exe keymap.cc \
 		*.o *.d *.i *.ii *.s symlinks core.* \
+		shell_resources.c \
 		raw2txt txt2raw
 
 cleaner: FORCE
@@ -155,6 +164,7 @@ cleaner: FORCE
 		readtest_lines.cc \
 		gcc111libbid.a \
 		*.o *.d *.i *.ii *.s symlinks core.* \
+		shell_resources.c \
 		raw2txt txt2raw
 	rm -rf IntelRDFPMathLib20U1
 
