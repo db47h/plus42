@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkApplicationWindow" id="window">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="orientation">vertical</property>
+      </object>
+    </child>
+  </object>
+
+  <object class="GtkHeaderBar" id="header_bar">
+    <property name="show-close-button">True</property>
+    <child>
+      <object class="GtkMenuButton" id="menu_btn">
+        <property name="tooltip-text" translatable="yes">Main Menu</property>
+        <property name="direction">none</property>
+        <property name="menu-model">window_menu</property>
+        <property name="use-popover">False</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+      </packing>
+    </child>
+  </object>
+
+  <menu id="window_menu">
+    <submenu id="file_submenu">
+      <attribute name="label">File</attribute>
+      <section>
+        <item>
+          <attribute name="label">States…</attribute>
+          <attribute name="action">app.states</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label">Show Print-Out</attribute>
+          <attribute name="action">app.printout_show</attribute>
+        </item>
+        <item>
+          <attribute name="label">Paper Advance</attribute>
+          <attribute name="action">app.printout_advance</attribute>
+          <!-- <attribute name="accel">&lt;Primary&gt;a</attribute> -->
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label">Import Programs…</attribute>
+          <attribute name="action">app.import</attribute>
+        </item>
+        <item>
+          <attribute name="label">Export Programs…</attribute>
+          <attribute name="action">app.export</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label">Preferences…</attribute>
+          <attribute name="action">app.preferences</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label">Quit</attribute>
+          <attribute name="action">app.quit</attribute>
+          <attribute name="accel">&lt;Primary&gt;q</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu id="edit_submenu">
+      <attribute name="label">Edit</attribute>
+      <section>
+        <item>
+          <attribute name="label">Copy</attribute>
+          <attribute name="action">app.copy</attribute>
+        </item>
+        <item>
+          <attribute name="label">Paste</attribute>
+          <attribute name="action">app.paste</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label">Copy Print-Out as Text</attribute>
+          <attribute name="action">app.printout_copy</attribute>
+        </item>
+        <item>
+          <attribute name="label">Copy Print-Out as Image</attribute>
+          <attribute name="action">app.printout_copy_img</attribute>
+        </item>
+        <item>
+          <attribute name="label">Clear Print-Out</attribute>
+          <attribute name="action">app.printout_clear</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu id="skin_submenu">
+      <attribute name="label">Skin</attribute>
+    </submenu>
+    <submenu id="help_submenu">
+      <attribute name="label">Help</attribute>
+      <section>
+        <item>
+          <attribute name="label">Documentation</attribute>
+          <attribute name="action">app.documentation</attribute>
+        </item>
+        <item>
+          <attribute name="label">Web Site</attribute>
+          <attribute name="action">app.website</attribute>
+        </item>
+        <item>
+          <attribute name="label">Free42 Web Site</attribute>
+          <attribute name="action">app.website_other</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label">Keyboard Shortcuts</attribute>
+          <attribute name="action">app.shortcuts</attribute>
+        </item>
+        <item>
+          <attribute name="label">Edit Keyboard Map</attribute>
+          <attribute name="action">app.edit_keymap</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label">About Plus42…</attribute>
+          <attribute name="action">app.about</attribute>
+        </item>
+      </section>
+    </submenu>
+  </menu>
+</interface>
+
