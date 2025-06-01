@@ -366,6 +366,7 @@ extern int repeating_key;
 extern bool force_redisplay;
 extern int skin_flags;
 extern bool start_eqn_cursor;
+extern bool quitting;
 
 int ascii2hp(char *dst, int dstlen, const char *src, int srclen = -1);
 void set_shift(bool shift);

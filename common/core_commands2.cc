@@ -1942,6 +1942,7 @@ int docmd_off(arg_struct *arg) {
     if (program_running() && no_keystrokes_yet)
         return ERR_SUSPICIOUS_OFF;
     set_running(false);
+    quitting = true;
     shell_powerdown();
     return ERR_NONE;
 }
